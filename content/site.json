@@ -1,6 +1,6 @@
 {
   "domain": "https://www.arqdecisions.com",
-  "base": "/",
+  "base": "/website/",
   "cname": "",
   "nav_cta": {
     "text": "30 Minuten für Ihr Zukunftsthema",
