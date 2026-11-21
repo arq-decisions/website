@@ -521,21 +521,21 @@ def main():
     for pid, p in PAGES.items():
         slug = p["fields"]["slug"]
         name = "index.html" if slug == "home" else f"{slug}.html"
-        (OUT / name).write_text(build_page(pid), encoding="utf-8")
+        (OUT / name).write_text(build_page(pid), encoding="utf-8", newline="\n")
         if not SITE["pages"].get(slug, {}).get("noindex"):
             urls.append(DOMAIN + ("/" if slug == "home" else "/" + slug))
-    (OUT / "404.html").write_text(build_404(), encoding="utf-8")
+    (OUT / "404.html").write_text(build_404(), encoding="utf-8", newline="\n")
     for old, new in SITE["redirects"].items():
-        (OUT / f"{old}.html").write_text(redirect_page(new), encoding="utf-8")
+        (OUT / f"{old}.html").write_text(redirect_page(new), encoding="utf-8", newline="\n")
     today = date.today().isoformat()
     (OUT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>\n" for u in sorted(urls))
-        + "</urlset>\n", encoding="utf-8")
-    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8")
+        + "</urlset>\n", encoding="utf-8", newline="\n")
+    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8", newline="\n")
     if SITE.get("cname"):
-        (OUT / "CNAME").write_text(SITE["cname"] + "\n", encoding="utf-8")
-    (OUT / ".nojekyll").write_text("", encoding="utf-8")
+        (OUT / "CNAME").write_text(SITE["cname"] + "\n", encoding="utf-8", newline="\n")
+    (OUT / ".nojekyll").write_text("", encoding="utf-8", newline="\n")
     print(f"{len(PAGES)} Seiten, {len(SITE['redirects'])} Weiterleitungen -> {OUT}")
 
 
