@@ -1,0 +1,59 @@
+{
+  "domain": "https://www.arqdecisions.com",
+  "base": "/",
+  "cname": "",
+  "nav_cta": {
+    "text": "30 Minuten für Ihr Zukunftsthema",
+    "modal": "4F1FbyiAGXibmsmVVnj5Tj"
+  },
+  "case_slugs": [
+    "regionale-wertschoepfung",
+    "automatisierungsradar",
+    "wettbewerb-und-kundschaft",
+    "zukunft-der-beratung",
+    "personalbedarf-der-stadt",
+    "fachleute-in-der-qualitaet"
+  ],
+  "pages": {
+    "home": {
+      "title": "arq decisions | Wissen, was kommt"
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung | arq decisions",
+      "description": "Datenschutzerklärung der arq decisions GmbH, Hamburg."
+    },
+    "help": {
+      "title": "Plattform-Anleitung | arq decisions"
+    }
+  },
+  "redirects": {
+    "home": "./",
+    "beta-automatisierungsradar": "automatisierungsradar",
+    "beta-regionale-wertschoepfung": "regionale-wertschoepfung",
+    "case-studies-and-inspiration": "fallbeispiele",
+    "human-co-pilot": "perspektiv",
+    "strategische-personalplanung": "fallbeispiele",
+    "podcasts": "./",
+    "spiegel": "./",
+    "die-sechs-stufen-zur-guten-entscheidung": "./"
+  },
+  "jsonld": {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "arq decisions GmbH",
+    "url": "https://www.arqdecisions.com/",
+    "logo": "https://www.arqdecisions.com/static/img/logo_arq.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Eifflerstraße 43",
+      "postalCode": "22769",
+      "addressLocality": "Hamburg",
+      "addressCountry": "DE"
+    },
+    "founder": [
+      {"@type": "Person", "name": "Dr. Niklas Wallmeier"},
+      {"@type": "Person", "name": "Timo Wienefoet"}
+    ],
+    "sameAs": ["https://www.linkedin.com/company/102158017/"]
+  }
+}
