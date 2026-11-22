@@ -22,7 +22,7 @@ E = json.loads((ROOT / "content/entries.json").read_text(encoding="utf-8"))
 A = json.loads((ROOT / "content/assets.json").read_text(encoding="utf-8"))
 SITE = json.loads((ROOT / "content/site.json").read_text(encoding="utf-8"))
 # Hero-Grafik, erzeugt mit tools/hero_art.py; eingebettet, damit sie die Schriften der Seite nutzt
-HERO_ART = (ROOT / "static/img/hero_prognosepfade_v8.svg").read_text(encoding="utf-8").strip()
+HERO_ART = (ROOT / "static/img/hero_prognosepfade_v9.svg").read_text(encoding="utf-8").strip()
 DOMAIN = SITE["domain"]
 
 esc = lambda s: html.escape(s or "", quote=True)

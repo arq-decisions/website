@@ -19,7 +19,7 @@ leiten weiter.
 | `content/site.json` | Seitentitel, Beschreibungen, Weiterleitungen alter Adressen, Navigation-Button, Domain |
 | `static/` | CSS, JavaScript, Schriften, Bilder |
 | `build.py` | baut die Seiten nach `docs/` |
-| `tools/hero_art.py` | erzeugt die Hero-Grafik (Prognosepfade) `static/img/hero_prognosepfade_v8.svg` (Fächerdiagramm wie auf nikwall.de) |
+| `tools/hero_art.py` | erzeugt die Hero-Grafik (Prognosepfade) `static/img/hero_prognosepfade_v9.svg`: verzweigte, gestrichelte Pfade mit Fragen an den Knoten, in der Bildsprache der Piktogramme |
 | `docs/` | fertige Seite, die GitHub Pages ausliefert |
 
 ## Ändern und veröffentlichen
