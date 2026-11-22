@@ -19,6 +19,7 @@ leiten weiter.
 | `content/site.json` | Seitentitel, Beschreibungen, Weiterleitungen alter Adressen, Navigation-Button, Domain |
 | `static/` | CSS, JavaScript, Schriften, Bilder |
 | `build.py` | baut die Seiten nach `docs/` |
+| `tools/hero_art.py` | erzeugt die Hero-Grafik (Prognosepfade) `static/img/hero_prognosepfade_v7.svg` |
 | `docs/` | fertige Seite, die GitHub Pages ausliefert |
 
 ## Ändern und veröffentlichen
@@ -35,6 +36,6 @@ SharePoint-Ordner `04 market/459 website mit claude/contentful_export_2026-11-21
 
 DNS liegt bei All-Inkl (kasserver). Für GitHub Pages:
 
-- `www` als CNAME auf `<konto>.github.io`
+- `www` als CNAME auf `arq-decisions.github.io`
 - `arqdecisions.com` mit vier A-Einträgen: 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
 - MX- und andere Mail-Einträge bleiben unverändert.
