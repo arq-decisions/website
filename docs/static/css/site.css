@@ -297,12 +297,12 @@ body.modal-open { overflow: hidden; }
   .hero--soft .hero-art { display: none; }
 }
 @media (max-width: 600px) {
-  /* Handy: auf Jetzt-Punkt und Zukunft zugeschnitten (Ausschnitt x 300–1000, y 70–740), links weich ausgeblendet */
+  /* Handy: auf Jetzt-Punkt und Zukunft zugeschnitten (Ausschnitt x 200–1000, y 20–780), links weich ausgeblendet */
   .hero-art {
-    aspect-ratio: 700 / 670; overflow: hidden;
+    aspect-ratio: 800 / 760; overflow: hidden;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%); mask-image: linear-gradient(90deg, transparent 0, #000 12%);
   }
-  .hero-art svg { position: absolute; width: 142.86%; max-width: none; right: 0; top: -10.45%; }
+  .hero-art svg { position: absolute; width: 125%; max-width: none; right: 0; top: -2.63%; }
 }
 @media (max-width: 720px) {
   :root { --gutter: 18px; }

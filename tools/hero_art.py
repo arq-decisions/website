@@ -1,175 +1,130 @@
-"""Erzeugt die Hero-Grafik (Prognosepfade) als SVG für die Startseite und die anderen Hero-Bereiche.
+"""Erzeugt die Hero-Grafik (Prognosepfade) als SVG, im Stil des Fächerdiagramms auf nikwall.de.
 
-Aufbau von links nach rechts: vergangene Pfade (verästelt, links ausgeblendet), der tatsächlich gegangene Weg
-bis zum Jetzt-Punkt, drei mögliche Zukünfte mit Fragezeichen, deren Spuren sich weiter verzweigen, und rechts
-die Wahrscheinlichkeiten, die im Takt wechseln. Die Grafik wird von build.py direkt in die Seite eingebettet,
-damit sie die Schriften der Seite nutzt (Roboto Condensed für Fragezeichen und Zahlen).
+Eine einzige Bildsprache: durchgezogene, leicht gezackte Verlaufslinien. Links die Vergangenheit als kräftige Linie
+bis zum Jetzt-Punkt, rechts ein Fächer feiner möglicher Zukünfte, drei davon hervorgehoben, am Ende jeweils die
+Wahrscheinlichkeit in der Farbe des Pfads. Animation: Die Zukunftslinien zeichnen sich nacheinander vom Jetzt-Punkt
+aus; alle 8 Sekunden folgt eine neue Prognose (4 Durchläufe, dann von vorn). Bei reduzierter Bewegung steht der
+erste Durchlauf still.
 
-    python tools/hero_art.py   ->  static/img/hero_prognosepfade_v7.svg
+Die Grafik wird von build.py direkt in die Seite eingebettet, damit sie die Schriften der Seite nutzt.
+
+    python tools/hero_art.py   ->  static/img/hero_prognosepfade_v8.svg
 """
 import math
+import random
 from pathlib import Path
 
-OUT = Path(__file__).resolve().parent.parent / "static" / "img" / "hero_prognosepfade_v7.svg"
+OUT = Path(__file__).resolve().parent.parent / "static" / "img" / "hero_prognosepfade_v8.svg"
 
 W, H = 1000, 800
-WHITE, SAGE, CRIMSON_LIGHT, CRIMSON, GREEN, GREEN_DEEP = "#ffffff", "#9dc09f", "#e05a78", "#bb2649", "#135b49", "#0f3d32"
+WHITE, SAGE, CRIMSON_LIGHT = "#ffffff", "#9dc09f", "#e05a78"
 FONT = "'Roboto Condensed', 'Arial Narrow', Arial, sans-serif"
 
-NOW = (400, 400)
-Q1_X, Q2_X, TRAIL_END_X, PILL_X = 530, 680, 790, 902
-BRANCHES = [  # y, Linienfarbe, Pille (Füllung, Schrift), Werte im Takt, Startverzögerung obere/untere Spur
-    (170, WHITE, (WHITE, GREEN), ("52 %", "47 %", "55 %", "61 %"), (-16.0, -9.0)),
-    (400, CRIMSON_LIGHT, (CRIMSON, WHITE), ("15 %", "18 %", "14 %", "12 %"), (-12.0, -5.0)),
-    (630, SAGE, (SAGE, GREEN_DEEP), ("33 %", "35 %", "31 %", "27 %"), (-14.0, -7.0)),
+NOW = (360, 400)
+X_END, STEP = 860, 25
+TOP, BOTTOM = 40, 760
+SET_SECONDS, SETS = 8, 4
+PERIOD = SET_SECONDS * SETS
+# Je Durchlauf: Endpunkte der drei hervorgehobenen Pfade (weiß, karmesin, salbei) und ihre Wahrscheinlichkeiten
+RUNS = [
+    ((200, 420, 615), ("52 %", "15 %", "33 %")),
+    ((218, 400, 600), ("47 %", "18 %", "35 %")),
+    ((190, 432, 630), ("55 %", "14 %", "31 %")),
+    ((178, 414, 640), ("61 %", "12 %", "27 %")),
 ]
-SPREAD_Q2, SPREAD_END = 65, 88
+HIGHLIGHT = ((WHITE, 3.2), (CRIMSON_LIGHT, 3.2), (SAGE, 3.2))
+FAN = 16
 
 
 def f(v):
     return f"{v:.1f}".rstrip("0").rstrip(".")
 
 
-def curve(p0, p1, k=0.45):
-    """Kubischer S-Bogen von p0 nach p1 (horizontale Tangenten), als Kontrollpunkte."""
-    dx = (p1[0] - p0[0]) * k
-    return p0, (p0[0] + dx, p0[1]), (p1[0] - dx, p1[1]), p1
+def walk(rng, y0, y1, n, sigma, curve=0.9):
+    """Gezackter Pfad von y0 nach y1 in n Schritten: Trend plus Brownsche Brücke, innerhalb der Grenzen."""
+    w = [0.0]
+    for _ in range(n):
+        w.append(w[-1] + rng.gauss(0, 1))
+    ys = []
+    for i in range(n + 1):
+        t = i / n
+        bridge = w[i] - t * w[-1]
+        y = y0 + (y1 - y0) * t**curve + sigma * bridge
+        ys.append(min(BOTTOM, max(TOP, y)))
+    return ys
 
 
-def d_of(c):
-    a, b, cc, d = c
-    return f"M{f(a[0])},{f(a[1])} C{f(b[0])},{f(b[1])} {f(cc[0])},{f(cc[1])} {f(d[0])},{f(d[1])}"
-
-
-def bez(c, t):
-    a, b, cc, d = c
-    u = 1 - t
-    return (u**3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * cc[0] + t**3 * d[0],
-            u**3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * cc[1] + t**3 * d[1])
-
-
-def sample(curves, step):
-    """Punkte in gleichem Bogenabstand entlang mehrerer Kurven."""
-    pts = []
-    for c in curves:
-        pts += [bez(c, i / 400) for i in range(401)]
-    out, acc = [pts[0]], 0.0
-    for p, q in zip(pts, pts[1:]):
-        acc += math.dist(p, q)
-        if acc >= step:
-            out.append(q)
-            acc = 0.0
-    return out
-
-
-def node(x, y, r=7):
-    return f'<circle cx="{f(x)}" cy="{f(y)}" r="{r}" fill="url(#hp-fade)"/>'
+def d_of(xs, ys):
+    return "M" + " L".join(f"{f(x)},{f(y)}" for x, y in zip(xs, ys))
 
 
 def build():
-    s = []
-    # ---------------------------------------------------------------- Vergangenheit
-    root = (70, 400)
-    tree = {  # Knoten -> Kinder
-        root: [(180, 220), (180, 395), (180, 590)],
-        (180, 220): [(290, 135), (290, 275)],
-        (180, 395): [(290, 335), (290, 420)],
-        (180, 590): [(290, 545), (290, 680)],
-        (290, 135): [(400, 100), (400, 160)],
-        (290, 275): [(400, 240), (400, 300)],
-        (290, 335): [(400, 345)],
-        (290, 420): [NOW, (400, 458)],
-        (290, 545): [(400, 520), (400, 572)],
-        (290, 680): [(400, 650), (400, 708)],
-    }
-    taken = [(-20, 408), root, (180, 395), (290, 420), NOW]
-    taken_edges = set(zip(taken, taken[1:]))
-    for a, kids in tree.items():
-        for b in kids:
-            if (a, b) not in taken_edges:
-                s.append(f'<path d="{d_of(curve(a, b))}" stroke="url(#hp-fade)" stroke-width="3"/>')
-    for a, b in zip(taken, taken[1:]):
-        s.append(f'<path d="{d_of(curve(a, b))}" stroke="url(#hp-fade-strong)" stroke-width="6.5"/>')
-    for a in tree:
-        if a[0] < 400:
-            s.append(node(*a, r=6))
-    for kids in tree.values():
-        for b in kids:
-            if b[0] == 400 and b != NOW:
-                s.append(f'<circle cx="{b[0]}" cy="{b[1]}" r="7" fill="#0b3a2d" stroke="{WHITE}" stroke-opacity=".5" stroke-width="3"/>')
+    rng = random.Random(459)
+    n = (X_END - NOW[0]) // STEP
+    xs = [NOW[0] + i * STEP for i in range(n + 1)]
+    out = []
 
-    # ---------------------------------------------------------------- Zukunft
-    q_marks, trails, pills = [], [], []
-    for y, col, (pill_bg, pill_fg), values, delays in BRANCHES:
-        s.append(f'<path class="hp-flow" d="{d_of(curve(NOW, (Q1_X, y)))}" stroke="{col}" stroke-width="6.5"/>')
-        q_marks.append(qmark(Q1_X, y, 30))
-        for sign, d0 in zip((-1, 1), delays):
-            q2 = (Q2_X, y + sign * SPREAD_Q2)
-            end = (TRAIL_END_X, y + sign * SPREAD_END)
-            pts = sample([curve((Q1_X, y), q2, 0.4), curve(q2, end, 0.4)], 23)
-            near = min(range(len(pts)), key=lambda i: math.dist(pts[i], q2))
-            for i, p in enumerate(pts[2:], start=2):
-                op = 1 if p[0] < TRAIL_END_X - 60 else max(0.25, (TRAIL_END_X - p[0]) / 60)
-                trails.append(f'<circle class="hp-lf" style="animation-delay:{d0 + 0.05 * i:.2f}s" cx="{f(p[0])}" '
-                              f'cy="{f(p[1])}" r="5" fill="{col}" fill-opacity="{op:.2f}"/>')
-            q_marks.append(qmark(*q2, 24, cls="hp-lf", delay=d0 + 0.05 * near))
-        pills.append(pill(PILL_X, y, pill_bg, pill_fg, values))
-    s += trails
-    # Jetzt-Punkt
-    s.append(f'<circle class="hp-halo" cx="{NOW[0]}" cy="{NOW[1]}" r="26" fill="none" stroke="{WHITE}" stroke-width="4"/>')
-    s.append(f'<circle cx="{NOW[0]}" cy="{NOW[1]}" r="28" fill="{WHITE}"/>')
-    s.append(f'<circle cx="{NOW[0]}" cy="{NOW[1]}" r="12" fill="{GREEN}"/>')
-    s += q_marks + pills
+    # Vergangenheit: eine kräftige Linie, links weich eingeblendet
+    hn = NOW[0] // 24
+    hx = [NOW[0] - (hn - i) * 24 for i in range(hn + 1)]
+    hy = walk(rng, 485, NOW[1], hn, 8, curve=1)
+    hy[-1] = NOW[1]
+    out.append(f'<path d="{d_of(hx, hy)}" stroke="url(#hp-past)" stroke-width="4"/>')
+    # Jetzt-Linie
+    out.append(f'<line x1="{NOW[0]}" x2="{NOW[0]}" y1="{TOP - 10}" y2="{BOTTOM + 10}" stroke="{WHITE}" stroke-opacity=".16" stroke-width="1.5"/>')
 
+    for k, (ends, labels) in enumerate(RUNS):
+        t0 = k * SET_SECONDS
+        g = [f'<g class="hp-set hp-set{k}">']
+        # Fächer: feine Linien, Endpunkte gleichmäßig verteilt
+        for i in range(FAN):
+            y1 = TOP + 20 + (BOTTOM - TOP - 40) * i / (FAN - 1) + rng.uniform(-14, 14)
+            ys = walk(rng, NOW[1], y1, n, 9)
+            delay = t0 + 0.08 * ((i * 5) % FAN)
+            g.append(f'<path class="hp-d" style="animation-delay:{delay:.2f}s" pathLength="1" d="{d_of(xs, ys)}" '
+                     f'stroke="{WHITE}" stroke-opacity=".2" stroke-width="2"/>')
+        # Hervorgehobene Pfade, Endpunkt und Wahrscheinlichkeit
+        for j, ((col, sw), y1, label) in enumerate(zip(HIGHLIGHT, ends, labels)):
+            ys = walk(rng, NOW[1], y1, n, 8)
+            delay = t0 + 1.3 + 0.18 * j
+            g.append(f'<path class="hp-d" style="animation-delay:{delay:.2f}s" pathLength="1" d="{d_of(xs, ys)}" '
+                     f'stroke="{col}" stroke-width="{sw}"/>')
+            ld = t0 + 2.6 + 0.12 * j
+            g.append(f'<g class="hp-l" style="animation-delay:{ld:.2f}s"><circle cx="{xs[-1]}" cy="{f(ys[-1])}" r="5.5" fill="{col}"/>'
+                     f'<text x="{xs[-1] + 18}" y="{f(ys[-1] + 11.5)}" font-family="{FONT}" font-size="34" font-weight="700" '
+                     f'fill="{col}">{label}</text></g>')
+        g.append("</g>")
+        out += g
+
+    # Jetzt-Punkt zuletzt, damit er über den Linien liegt
+    out.append(f'<circle cx="{NOW[0]}" cy="{NOW[1]}" r="9" fill="#135b49" stroke="{WHITE}" stroke-width="3.5"/>')
+
+    p = PERIOD
+    draw_end = 1.3 / p * 100          # Linie gezeichnet
+    hold_end = 6.7 / p * 100          # danach ausblenden
+    gone = 7.8 / p * 100
+    l_in, l_hold, l_out = 0.6 / p * 100, 5.0 / p * 100, 6.0 / p * 100
     style = (
         "<style>"
-        ".hp path{fill:none;stroke-linecap:round}"
-        ".hp-flow{stroke-dasharray:2 17;animation:hp-flow 14s linear infinite}"
-        "@keyframes hp-flow{to{stroke-dashoffset:-380}}"
-        ".hp-halo{transform-box:fill-box;transform-origin:center;animation:hp-halo 4s ease-out infinite}"
-        "@keyframes hp-halo{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.2);opacity:0}}"
-        ".hp-lf{opacity:0;animation:hp-life 16s linear infinite}"
-        "@keyframes hp-life{0%{opacity:0}2%{opacity:1}54%{opacity:1}58%{opacity:0}100%{opacity:0}}"
-        ".hp-ph{opacity:0;animation:hp-ph 16s linear infinite}"
-        "@keyframes hp-ph{0%{opacity:0}3%{opacity:1}22%{opacity:1}25%{opacity:0}100%{opacity:0}}"
-        "@media (prefers-reduced-motion:reduce){.hp-flow,.hp-halo{animation:none}.hp-lf{animation:none;opacity:1}"
-        ".hp-ph{animation:none}.hp-ph0{opacity:1}}"
+        ".hp path{fill:none;stroke-linecap:round;stroke-linejoin:round}"
+        f".hp-d{{stroke-dasharray:1;stroke-dashoffset:1;animation:hp-draw {p}s linear infinite}}"
+        f"@keyframes hp-draw{{0%{{stroke-dashoffset:1;opacity:1;animation-timing-function:cubic-bezier(.3,.6,.4,1)}}"
+        f"{draw_end:.2f}%{{stroke-dashoffset:0;opacity:1}}{hold_end:.2f}%{{stroke-dashoffset:0;opacity:1}}"
+        f"{gone:.2f}%{{stroke-dashoffset:0;opacity:0}}{gone + 0.1:.2f}%{{stroke-dashoffset:1;opacity:0}}"
+        "100%{stroke-dashoffset:1;opacity:0}}"
+        f".hp-l{{opacity:0;animation:hp-label {p}s linear infinite}}"
+        f"@keyframes hp-label{{0%{{opacity:0}}{l_in:.2f}%{{opacity:1}}{l_hold:.2f}%{{opacity:1}}{l_out:.2f}%{{opacity:0}}100%{{opacity:0}}}}"
+        "@media (prefers-reduced-motion:reduce){.hp-d,.hp-l{animation:none}.hp-d{stroke-dashoffset:0}.hp-l{opacity:1}"
+        ".hp-set:not(.hp-set0){display:none}}"
         "</style>"
     )
     defs = (
-        "<defs>"
-        '<linearGradient id="hp-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="230" y2="0">'
-        f'<stop offset="0" stop-color="{WHITE}" stop-opacity="0"/><stop offset="1" stop-color="{WHITE}" stop-opacity=".36"/></linearGradient>'
-        '<linearGradient id="hp-fade-strong" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="0">'
-        f'<stop offset="0" stop-color="{WHITE}" stop-opacity="0"/><stop offset="1" stop-color="{WHITE}" stop-opacity=".95"/></linearGradient>'
-        '<linearGradient id="hp-cone" gradientUnits="userSpaceOnUse" x1="400" y1="0" x2="1000" y2="0">'
-        f'<stop offset="0" stop-color="{SAGE}" stop-opacity=".20"/><stop offset="1" stop-color="{SAGE}" stop-opacity="0"/></linearGradient>'
-        '<radialGradient id="hp-glow" gradientUnits="userSpaceOnUse" cx="640" cy="400" r="400">'
-        f'<stop offset="0" stop-color="{SAGE}" stop-opacity=".16"/><stop offset="1" stop-color="{SAGE}" stop-opacity="0"/></radialGradient>'
-        "</defs>"
+        '<defs><linearGradient id="hp-past" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="180" y2="0">'
+        f'<stop offset="0" stop-color="{WHITE}" stop-opacity="0"/><stop offset="1" stop-color="{WHITE}" stop-opacity=".95"/>'
+        "</linearGradient></defs>"
     )
-    bg = (f'<circle cx="640" cy="400" r="400" fill="url(#hp-glow)"/>'
-          f'<polygon points="{NOW[0]},{NOW[1]} 1000,40 1000,760" fill="url(#hp-cone)"/>')
     return (f'<svg class="hp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" '
-            f'preserveAspectRatio="xMidYMid meet" focusable="false">{style}{defs}{bg}{"".join(s)}</svg>\n')
-
-
-def qmark(x, y, r, cls="", delay=None):
-    a = f' class="{cls}"' if cls else ""
-    a += f' style="animation-delay:{delay:.2f}s"' if delay is not None else ""
-    fs = round(r * 1.25)
-    return (f'<g{a}><circle cx="{f(x)}" cy="{f(y)}" r="{r}" fill="{GREEN}" stroke="{WHITE}" stroke-width="{4.5 if r > 26 else 4}"/>'
-            f'<text x="{f(x)}" y="{f(y + fs * 0.36)}" font-family="{FONT}" font-size="{fs}" font-weight="700" '
-            f'fill="{WHITE}" text-anchor="middle">?</text></g>')
-
-
-def pill(x, y, bg, fg, values):
-    w, h = 132, 58
-    out = [f'<rect x="{f(x - w / 2)}" y="{f(y - h / 2)}" width="{w}" height="{h}" rx="{h / 2}" fill="{bg}"/>']
-    for i, v in enumerate(values):
-        out.append(f'<text class="hp-ph hp-ph{i}" style="animation-delay:{-16 + 4 * i:.2f}s" x="{f(x)}" y="{f(y + 11)}" '
-                   f'font-family="{FONT}" font-size="32" font-weight="700" fill="{fg}" text-anchor="middle">{v}</text>')
-    return "".join(out)
+            f'preserveAspectRatio="xMidYMid meet" focusable="false">{style}{defs}{"".join(out)}</svg>\n')
 
 
 if __name__ == "__main__":
