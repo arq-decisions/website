@@ -131,9 +131,14 @@ p { margin: 0 0 .9em; }
   min-height: 460px; display: flex; align-items: center;
 }
 .hero--tall { min-height: min(720px, 86vh); }
-.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; max-width: none; }
-.hero-bg--soft { opacity: .55; }
-.hero-bg--photo { object-position: center; }
+.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; max-width: none; }
+/* Prognosepfade: Grafik als eigene Spalte rechts, bündig mit dem Raster */
+.hero--art { background: radial-gradient(ellipse 55% 75% at 76% 50%, rgba(157, 192, 159, .12), transparent 70%), linear-gradient(135deg, #0c4334 0%, #062519 100%); }
+.hero--art .hero-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.hero.hero--art h1 { font-size: clamp(2.2rem, 1rem + 2.7vw, 3.6rem); }
+.hero-art { position: relative; }
+.hero-art svg { display: block; width: 100%; height: auto; }
+.hero--soft .hero-art { opacity: .5; }
 .hero-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(6, 37, 25, .92) 0%, rgba(6, 37, 25, .78) 38%, rgba(6, 37, 25, .25) 72%, rgba(6, 37, 25, .05) 100%); }
 .hero-inner { position: relative; }
 .hero h1 { color: var(--white); font-size: clamp(2.3rem, 1.4rem + 3.6vw, 4.1rem); line-height: 1.05; max-width: 15.5em; margin-bottom: .45em; letter-spacing: -.01em; text-wrap: balance; }
@@ -286,6 +291,18 @@ body.modal-open { overflow: hidden; }
   .grid--3 { --cols: 2; }
   .foot-grid { grid-template-columns: 1fr 1fr; }
   .foot-imprint { grid-column: 1 / -1; }
+  /* Hero: Grafik unter dem Text */
+  .hero--art .hero-inner { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .hero-art { width: 100%; max-width: 640px; }
+  .hero--soft .hero-art { display: none; }
+}
+@media (max-width: 600px) {
+  /* Handy: auf Jetzt-Punkt und Zukunft zugeschnitten (Ausschnitt x 300–1000, y 70–740), links weich ausgeblendet */
+  .hero-art {
+    aspect-ratio: 700 / 670; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12%); mask-image: linear-gradient(90deg, transparent 0, #000 12%);
+  }
+  .hero-art svg { position: absolute; width: 142.86%; max-width: none; right: 0; top: -10.45%; }
 }
 @media (max-width: 720px) {
   :root { --gutter: 18px; }
@@ -295,7 +312,6 @@ body.modal-open { overflow: hidden; }
   .hero { padding: calc(var(--header-h) + 48px) 0 64px; min-height: 0; }
   .hero--tall { min-height: 0; }
   .hero-shade { background: linear-gradient(180deg, rgba(6, 37, 25, .72) 0%, rgba(6, 37, 25, .88) 100%); }
-  .hero-bg { object-position: 78% 50%; }
   .hero-text { font-size: 1.06rem; }
   .card { padding: 24px 22px 26px; }
   .card--person { flex-direction: column; }

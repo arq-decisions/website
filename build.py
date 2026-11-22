@@ -21,6 +21,8 @@ OUT = ROOT / "docs"
 E = json.loads((ROOT / "content/entries.json").read_text(encoding="utf-8"))
 A = json.loads((ROOT / "content/assets.json").read_text(encoding="utf-8"))
 SITE = json.loads((ROOT / "content/site.json").read_text(encoding="utf-8"))
+# Hero-Grafik, erzeugt mit tools/hero_art.py; eingebettet, damit sie die Schriften der Seite nutzt
+HERO_ART = (ROOT / "static/img/hero_prognosepfade_v7.svg").read_text(encoding="utf-8").strip()
 DOMAIN = SITE["domain"]
 
 esc = lambda s: html.escape(s or "", quote=True)
@@ -282,22 +284,21 @@ def hero(eid, pid, slug):
     f = F(eid)
     img = lid(f.get("image"))
     a = asset(img) if img else None
-    bg = ""
-    if a and a["file"].endswith(".svg"):
-        bg = f'<img class="hero-bg" src="static/img/{a["file"]}" alt="" aria-hidden="true">'
-    elif a:
-        bg = f'<img class="hero-bg hero-bg--photo" src="static/img/{a["file"]}" alt="" aria-hidden="true">'
-    else:
-        bg = '<img class="hero-bg hero-bg--soft" src="static/img/hero_prognosepfade_v6.svg" alt="" aria-hidden="true">'
     kicker = ""
     if slug in SITE.get("case_slugs", []):
         kicker = '<p class="hero-kicker">Fallbeispiel</p>'
     body = rt(f.get("bodyText"), pid)
     btn = cta(lid(f["cta"]), pid, "btn--hero") if f.get("cta") else ""
-    size = "hero--tall" if int(f.get("vhHeight") or 60) >= 66 else ""
-    return (f'<section class="hero {size}">{bg}<div class="hero-shade"></div><div class="wrap hero-inner">'
-            f'{kicker}<h1>{esc(f.get("headline"))}</h1><div class="hero-text rt">{body}</div>'
-            f'{f"<div class=hero-cta>{btn}</div>" if btn else ""}</div></section>')
+    size = " hero--tall" if int(f.get("vhHeight") or 60) >= 66 else ""
+    copy = (f'{kicker}<h1>{esc(f.get("headline"))}</h1><div class="hero-text rt">{body}</div>'
+            f'{f"<div class=hero-cta>{btn}</div>" if btn else ""}')
+    if a and not a["file"].endswith(".svg"):  # Foto als Hintergrund
+        return (f'<section class="hero{size}"><img class="hero-bg hero-bg--photo" src="static/img/{a["file"]}" alt="" '
+                f'aria-hidden="true"><div class="hero-shade"></div><div class="wrap hero-inner">{copy}</div></section>')
+    # Prognosepfade als eigene Spalte neben dem Text; ohne Bild in Contentful gedämpft
+    soft = "" if a else " hero--soft"
+    return (f'<section class="hero hero--art{soft}{size}"><div class="wrap hero-inner"><div class="hero-copy">{copy}</div>'
+            f'<div class="hero-art" aria-hidden="true">{HERO_ART}</div></div></section>')
 
 
 # ---------------------------------------------------------------- Navigation und Fuß
