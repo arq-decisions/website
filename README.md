@@ -17,6 +17,7 @@ leiten weiter.
 | `content/entries.json` | Texte und Struktur aller Seiten (veröffentlichte Contentful-Einträge, Locale de-DE) |
 | `content/assets.json` | Bilder: Datei, Titel, Beschreibung, Größe |
 | `content/site.json` | Seitentitel, Beschreibungen, Weiterleitungen alter Adressen, Navigation-Button, Domain |
+| `content/robots.txt` | Regeln für Crawler: Suchmaschinen, KI-Suche und Linkvorschauen erlaubt, alle anderen ausgeschlossen (bewilligt 24.11.2026) |
 | `static/` | CSS, JavaScript, Schriften, Bilder |
 | `build.py` | baut die Seiten nach `docs/` |
 | `tools/hero_art.py` | erzeugt die Hero-Grafik (Prognosepfade) `static/img/hero_prognosepfade_v9.svg`: verzweigte, gestrichelte Pfade mit Fragen an den Knoten, in der Bildsprache der Piktogramme |
