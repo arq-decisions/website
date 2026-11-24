@@ -5762,7 +5762,7 @@
        {
         "nodeType": "hyperlink",
         "data": {
-         "uri": "https://images.ctfassets.net/gkctwj3xl0vu/1UVn4iSggIHzw0GWMUGpaP/024497c793d2691ffdf81458aec5ba46/zukunftsatlas_beispiel_landkarte.png"
+         "uri": "static/img/zukunftsatlas_beispiel_landkarte.png"
         },
         "content": [
          {
@@ -6019,14 +6019,46 @@
         "data": {}
        }
       ]
+     },
+     {
+      "nodeType": "paragraph",
+      "data": {},
+      "content": [
+       {
+        "nodeType": "text",
+        "value": "",
+        "marks": [],
+        "data": {}
+       },
+       {
+        "nodeType": "hyperlink",
+        "data": {
+         "uri": "mailto:kontakt@arqdecisions.com?subject=Vorgespr%C3%A4ch%20zu%20unserem%20Zukunftsthema"
+        },
+        "content": [
+         {
+          "nodeType": "text",
+          "value": "E-Mail an arq decisions schreiben",
+          "marks": [
+           {
+            "type": "bold"
+           }
+          ],
+          "data": {}
+         }
+        ]
+       },
+       {
+        "nodeType": "text",
+        "value": " · kontakt@arqdecisions.com",
+        "marks": [],
+        "data": {}
+       }
+      ]
      }
     ]
    },
-   "title": "30 Minuten für Ihr Zukunftsthema",
-   "iFrame": {
-    "link": "Entry",
-    "id": "4r0ZXMqI0cZLCHPlB5cZVY"
-   }
+   "title": "30 Minuten für Ihr Zukunftsthema"
   }
  },
  "4FtsmNsgc7s32ixNhLCM9d": {
@@ -7443,7 +7475,7 @@
        {
         "nodeType": "hyperlink",
         "data": {
-         "uri": "https://images.ctfassets.net/gkctwj3xl0vu/4gB5N6t0evg3AlYTiHuKjL/b606ea179fa6bf042d37fe19aea53464/zukunftsatlas_beispiel_kernaussagen.png"
+         "uri": "static/img/zukunftsatlas_beispiel_kernaussagen.png"
         },
         "content": [
          {
@@ -11444,7 +11476,7 @@
        {
         "nodeType": "hyperlink",
         "data": {
-         "uri": "https://images.ctfassets.net/gkctwj3xl0vu/41TBiWEi93Xlcd7PFjLgMo/2511158ad1b0b2cbf566945b696c0bc3/zukunftsatlas_beispiel_signale.png"
+         "uri": "static/img/zukunftsatlas_beispiel_signale.png"
         },
         "content": [
          {
