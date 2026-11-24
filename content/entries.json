@@ -9470,7 +9470,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Unter den unter 1. genannten Post- und E-Mail-Adressen.",
+        "value": "Unter den oben genannten Post- und E-Mail-Adressen.",
         "marks": [],
         "data": {}
        }
@@ -9522,7 +9522,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Zur Erfüllung der unter dieser Ziffer aufgeführten Zwecke werden keinen weiteren Empfängern personenbezogene Daten offengelegt.",
+        "value": "Empfänger der Daten ist unser Hosting-Dienstleister GitHub (siehe a). Darüber hinaus legen wir personenbezogene Daten keinen weiteren Empfängern offen.",
         "marks": [],
         "data": {}
        }
@@ -9582,7 +9582,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "a) Logfiles",
+        "value": "a) Hosting und Logfiles",
         "marks": [
          {
           "type": "bold"
@@ -9598,7 +9598,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Bei jedem Aufruf unserer Webseiten werden auf Grundlage unseres berechtigten Interesses gemäß Art. 6 Abs. 1f EU DS-GVO automatisch sog. Logfiles gespeichert, die Angaben zu dem unsere Webseiten aufrufenden Rechner enthalten, z. B. Informationen über den Browsertyp, das verwendete Betriebssystem, den Internet-Service-Provider, die IP-Adresse, Datum und Uhrzeit des Zugriffs.",
+        "value": "Unsere Webseiten werden bei GitHub Pages gehostet, einem Dienst der GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Bei jedem Aufruf verarbeitet GitHub automatisch Angaben zu dem aufrufenden Rechner, insbesondere die IP-Adresse, Datum und Uhrzeit des Zugriffs, die aufgerufene Seite sowie Browsertyp und Betriebssystem. Diese Angaben sind technisch erforderlich, um die Seiten auszuliefern. GitHub speichert die IP-Adresse außerdem, um seine Dienste vor Missbrauch und Angriffen zu schützen. Wir selbst erhalten keine Logfiles und werten keine Zugriffe aus.",
         "marks": [],
         "data": {}
        }
@@ -9610,7 +9610,27 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Eine Speicherung dieser Daten ist notwendig, um Nutzern unsere Webseiten für die Dauer der Sitzung zur Verfügung stellen zu können. Wir nutzen diese Daten auch, um unsere Webseiten zu optimieren und die Sicherheit unserer IT-Systeme zu gewährleisten. Die Daten aus den Logfiles werden gelöscht, sobald sie für die benannten Zwecke nicht mehr erforderlich sind.",
+        "value": "Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung unserer Webseiten (Art. 6 Abs. 1 lit. f DS-GVO). GitHub ist nach dem EU-US Data Privacy Framework zertifiziert; die Übermittlung in die USA stützt sich auf den Angemessenheitsbeschluss der EU-Kommission (Art. 45 DS-GVO). Weitere Informationen finden Sie in der ",
+        "marks": [],
+        "data": {}
+       },
+       {
+        "nodeType": "hyperlink",
+        "data": {
+         "uri": "https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement"
+        },
+        "content": [
+         {
+          "nodeType": "text",
+          "value": "Datenschutzerklärung von GitHub",
+          "marks": [],
+          "data": {}
+         }
+        ]
+       },
+       {
+        "nodeType": "text",
+        "value": ".",
         "marks": [],
         "data": {}
        }
@@ -9710,7 +9730,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "c) Kontaktformular",
+        "value": "c) Kontakt per E-Mail",
         "marks": [
          {
           "type": "bold"
@@ -9726,7 +9746,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Für die Anforderung weiterer Informationen stellen wir Ihnen an verschiedenen Stellen auf unseren Webseiten Kontaktformulare zur Verfügung, mit denen Sie sich direkt an uns wenden können. Die hierbei eingegebenen personenbezogenen Daten (z. B. Name, E-Mail-Adresse) verarbeiten wir im Rahmen der gesetzlichen Bestimmungen für die Bearbeitung der Anfrage gemäß Art. 6 Abs. 1b bzw. Art. 6 Abs. 1f EU DS-GVO.",
+        "value": "Wenn Sie uns eine E-Mail schreiben, verarbeiten wir Ihre Angaben (z. B. Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu bearbeiten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DS-GVO, soweit Ihre Anfrage auf einen Vertrag zielt, sonst unser berechtigtes Interesse an der Beantwortung (Art. 6 Abs. 1 lit. f DS-GVO).",
         "marks": [],
         "data": {}
        }
@@ -9754,7 +9774,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Wir verwenden derzeit keine Cookies.",
+        "value": "Wir verwenden keine Cookies und speichern keine Informationen auf Ihrem Endgerät. Deshalb gibt es auf unseren Webseiten kein Cookie-Banner.",
         "marks": [],
         "data": {}
        }
@@ -9766,67 +9786,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Rechtsgrundlage für die Datenverarbeitung durch Cookies kann entweder ein berechtigtes Interesse von arq decisions oder eine Einwilligung des Nutzers sein. ",
-        "marks": [],
-        "data": {}
-       }
-      ]
-     },
-     {
-      "nodeType": "paragraph",
-      "data": {},
-      "content": [
-       {
-        "nodeType": "text",
-        "value": "Ein berechtigtes Interesse für arq decisions zum Einsatz von Cookies gemäß Art. 6 Abs. 1f DS-GVO & § 25 Abs. 2 TTDSG besteht insbesondere beim Einsatz unbedingt erforderlicher Cookies (siehe oben). Hierfür ist keine Einwilligung erforderlich.",
-        "marks": [],
-        "data": {}
-       }
-      ]
-     },
-     {
-      "nodeType": "paragraph",
-      "data": {},
-      "content": [
-       {
-        "nodeType": "text",
-        "value": "Für den Einsatz aller anderen Arten von Cookies (z. B. Marketing- und Social Media Cookies) ist eine Einwilligung erforderlich (Art. 6 Abs. 1a, f DS-GVO & § 25 Abs. 1 TTDSG), die über das auf unseren Webseiten eingeblendete Cookie-Banner abgegeben werden kann.",
-        "marks": [],
-        "data": {}
-       }
-      ]
-     },
-     {
-      "nodeType": "paragraph",
-      "data": {},
-      "content": [
-       {
-        "nodeType": "text",
-        "value": "Weitere detaillierte Informationen zu den von uns eingesetzten Cookies können unter dem Punkt „Cookie-Einstellungen“ am Ende der Webseite jederzeit abgerufen werden können. Dort kann die gewählte Cookie-Konfiguration vom Nutzer auch jederzeit angepasst werden.",
-        "marks": [],
-        "data": {}
-       }
-      ]
-     },
-     {
-      "nodeType": "paragraph",
-      "data": {},
-      "content": [
-       {
-        "nodeType": "text",
-        "value": "Hinweis: Bei einer Zustimmung zu einer Kategorie werden die Cookies sofort bzw. beim Neuladen der Webseite aktiviert. Sollten Sie Ihre bereits erteilte Zustimmung zu einer Kategorie widerrufen, bleiben die gesetzten Cookies bis zum Ende ihrer Laufzeit noch aktiv. Um sicherzustellen, dass diese Cookies sofort blockiert werden, müssen Sie diese nach Ihrem Widerruf manuell über Ihre Browser-Einstellungen löschen. ",
-        "marks": [],
-        "data": {}
-       }
-      ]
-     },
-     {
-      "nodeType": "paragraph",
-      "data": {},
-      "content": [
-       {
-        "nodeType": "text",
-        "value": "e) Tracking- und Analysetools",
+        "value": "e) Reichweitenmessung und Inhalte von Drittanbietern",
         "marks": [
          {
           "type": "bold"
@@ -9842,7 +9802,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Wir verwenden derzeit keine Tracking und Analysetools von Drittanbietern. ",
+        "value": "Wir verwenden keine Tracking- oder Analysetools und zählen keine Besuche. Schriften, Bilder und Videos liefern wir selbst aus; Inhalte von Drittanbietern werden nicht nachgeladen. Links zu anderen Websites, etwa zu LinkedIn, führen Sie erst beim Anklicken dorthin.",
         "marks": [],
         "data": {}
        }
@@ -9922,7 +9882,7 @@
       "content": [
        {
         "nodeType": "text",
-        "value": "Betroffenen stehen Auskunftsrechte gemäß Art. 15 EU DS-GVO über die Verarbeitung Ihrer personenbezogenen Daten durch arq decisions (u. a. auch über den Zweck der Verarbeitung, etwaige Empfänger und die voraussichtliche Dauer der Speicherung), Rechte auf Berichtigung unrichtiger Daten (Art. 16 EU DS-GVO), Löschung (Art. 17 EU DS-GVO), Einschränkung der Verarbeitung und Datenübertragbarkeit der eingebrachten Daten (Art. 18, 20 EU DS-GVO) sowie das Recht auf Widerspruch gegen eine Verwendung für Marketingzwecke sowie aufgrund einer Verarbeitung auf der Grundlage eines berechtigten Interesses von arq decisions (Art. 21 EU DS-GVO) zu.\nEinmal erteilte Einwilligungen können grundsätzlich gegenüber arq decisions jederzeit mit Wirkung für die Zukunft widerrufen werden. Zur Wahrung dieser Rechte kann sich jeder Betroffene an den Datenschutzbeauftragten von arq decisions wenden (siehe Ziff. 2). Daneben besteht auch ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde. Betroffene können Ihre Beschwerde an die Behörde Ihres Wohnsitzes, grundsätzlich aber auch an jede andere Datenschutzaufsichtsbehörde wenden.",
+        "value": "Betroffenen stehen Auskunftsrechte gemäß Art. 15 EU DS-GVO über die Verarbeitung Ihrer personenbezogenen Daten durch arq decisions (u. a. auch über den Zweck der Verarbeitung, etwaige Empfänger und die voraussichtliche Dauer der Speicherung), Rechte auf Berichtigung unrichtiger Daten (Art. 16 EU DS-GVO), Löschung (Art. 17 EU DS-GVO), Einschränkung der Verarbeitung und Datenübertragbarkeit der eingebrachten Daten (Art. 18, 20 EU DS-GVO) sowie das Recht auf Widerspruch gegen eine Verwendung für Marketingzwecke sowie aufgrund einer Verarbeitung auf der Grundlage eines berechtigten Interesses von arq decisions (Art. 21 EU DS-GVO) zu.\nEinmal erteilte Einwilligungen können grundsätzlich gegenüber arq decisions jederzeit mit Wirkung für die Zukunft widerrufen werden. Zur Wahrung dieser Rechte kann sich jeder Betroffene an den Datenschutzbeauftragten von arq decisions wenden (siehe oben). Daneben besteht auch ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde. Betroffene können Ihre Beschwerde an die Behörde Ihres Wohnsitzes, grundsätzlich aber auch an jede andere Datenschutzaufsichtsbehörde wenden.",
         "marks": [],
         "data": {}
        }
@@ -10374,7 +10334,7 @@
   "type": "heroBannerComponent",
   "fields": {
    "internalName": "Privacy hero",
-   "headline": "Privacy Policy",
+   "headline": "Datenschutzerklärung",
    "image": {
     "link": "Asset",
     "id": "IKOqNl4CoNufXrh4SGzg8"
