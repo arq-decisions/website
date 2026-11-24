@@ -11,6 +11,7 @@ import html
 import json
 import re
 import shutil
+import struct
 import sys
 from datetime import date
 from pathlib import Path
@@ -104,6 +105,51 @@ def asset(aid):
     return A.get(aid)
 
 
+def img_dims(path):
+    """Breite und Höhe einer Bilddatei: PNG, GIF, JPEG; SVG nur mit festen Maßen im Wurzelelement. Sonst (None, None)."""
+    try:
+        b = path.read_bytes()
+    except OSError:
+        return None, None
+    if b[:8] == b"\x89PNG\r\n\x1a\n":
+        return struct.unpack(">II", b[16:24])
+    if b[:6] in (b"GIF87a", b"GIF89a"):
+        return struct.unpack("<HH", b[6:10])
+    if b[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(b):
+            if b[i] != 0xFF:
+                i += 1
+                continue
+            m = b[i + 1]
+            if m in (0xC0, 0xC1, 0xC2):
+                h, w = struct.unpack(">HH", b[i + 5:i + 9])
+                return w, h
+            if m == 0xFF or 0xD0 <= m <= 0xD9 or m == 0x01:
+                i += 1 if m == 0xFF else 2
+                continue
+            i += 2 + struct.unpack(">H", b[i + 2:i + 4])[0]
+        return None, None
+    if b[:4] == b"RIFF" and b[8:12] == b"WEBP":
+        kind = b[12:16]
+        if kind == b"VP8 ":
+            w, h = struct.unpack("<HH", b[26:30])
+            return w & 0x3FFF, h & 0x3FFF
+        if kind == b"VP8L":
+            v = int.from_bytes(b[21:25], "little")
+            return (v & 0x3FFF) + 1, ((v >> 14) & 0x3FFF) + 1
+        if kind == b"VP8X":
+            return int.from_bytes(b[24:27], "little") + 1, int.from_bytes(b[27:30], "little") + 1
+    if path.suffix == ".svg":
+        root = re.search(rb"<svg\b[^>]*>", b)
+        if root:
+            w = re.search(rb'\swidth="(\d+(?:\.\d+)?)(?:px)?"', root.group(0))
+            h = re.search(rb'\sheight="(\d+(?:\.\d+)?)(?:px)?"', root.group(0))
+            if w and h:
+                return round(float(w.group(1))), round(float(h.group(1)))
+    return None, None
+
+
 def img_tag(aid, cls="", max_h=None, alt=None, lazy=True):
     a = asset(aid)
     if not a:
@@ -118,6 +164,8 @@ def img_tag(aid, cls="", max_h=None, alt=None, lazy=True):
         return (f'<video class="{cls}" src="static/img/{stem}.mp4" autoplay muted loop playsinline '
                 f'preload="metadata" aria-label="{esc(alt)}"{style}></video>')
     w, h = a.get("width"), a.get("height")
+    if not (w and h):
+        w, h = img_dims(ROOT / "static/img" / a["file"])
     dims = f' width="{w}" height="{h}"' if w and h else ""
     loading = ' loading="lazy" decoding="async"' if lazy else ""
     return f'<img class="{cls}" src="{esc(src)}" alt="{esc(alt)}"{dims}{loading}{style}>'
@@ -454,6 +502,22 @@ def head(title, desc, canonical, noindex=False, extra=""):
 </head>"""
 
 
+def clip(text, n=160):
+    """Kürzt für die Meta-Beschreibung: am letzten Satzende vor n Zeichen, sonst am Wortende mit Auslassung."""
+    text = " ".join((text or "").split())
+    if len(text) <= n:
+        return text
+    cut = text[:n]
+    end = max(cut.rfind(". "), cut.rfind("? "), cut.rfind("! "))
+    if end >= 80:
+        return cut[:end + 1]
+    return cut[:cut.rfind(" ")].rstrip(" ,;:–-") + " …"
+
+
+def jsonld(data):
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
 def build_page(pid):
     global MODALS_USED
     MODALS_USED = set()
@@ -463,15 +527,25 @@ def build_page(pid):
     hero_id = lid(p.get("hero"))
     hf = F(hero_id) if hero_id else {}
     title = meta.get("title") or f'{p.get("pageName")} | arq decisions'
-    desc = meta.get("description") or (rt_plain(hf.get("bodyText")) or hf.get("headline") or "")[:158]
+    desc = meta.get("description") or clip(rt_plain(hf.get("bodyText")) or hf.get("headline") or "")
     canonical = DOMAIN + ("/" if slug == "home" else "/" + slug)
     nav_html = nav(pid)
     hero_html = hero(hero_id, pid, slug) if hero_id else ""
     sections = "".join(section(s["id"], pid, i) for i, s in enumerate(p.get("pageContent") or []) if s["id"] in E)
     foot = footer(pid)
-    ld = ""
     if slug == "home":
-        ld = '<script type="application/ld+json">' + json.dumps(SITE["jsonld"], ensure_ascii=False) + "</script>"
+        org = {k: v for k, v in SITE["jsonld"].items() if k != "@context"}
+        org["@id"] = DOMAIN + "/#organization"
+        website = {"@type": "WebSite", "@id": DOMAIN + "/#website", "name": "arq decisions", "url": DOMAIN + "/",
+                   "inLanguage": "de-DE", "publisher": {"@id": DOMAIN + "/#organization"}}
+        ld = jsonld({"@context": "https://schema.org", "@graph": [org, website]})
+    else:
+        crumbs = [("arq decisions", DOMAIN + "/")]
+        if slug in SITE.get("case_slugs", []):
+            crumbs.append(("Fallbeispiele", DOMAIN + "/fallbeispiele"))
+        crumbs.append((title.split(" | ")[0], canonical))
+        ld = jsonld({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
     body_cls = "page-" + slug
     return (head(title, desc, canonical, noindex=meta.get("noindex", False), extra=ld)
             + f'\n<body class="{body_cls}">\n<a class="skip" href="#main">Zum Inhalt</a>\n{nav_html}\n<main id="main">\n'
