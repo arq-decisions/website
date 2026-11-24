@@ -543,7 +543,7 @@ def build_page(pid):
         crumbs = [("arq decisions", DOMAIN + "/")]
         if slug in SITE.get("case_slugs", []):
             crumbs.append(("Fallbeispiele", DOMAIN + "/fallbeispiele"))
-        crumbs.append((title.split(" | ")[0], canonical))
+        crumbs.append((meta.get("crumb") or p.get("pageName"), canonical))
         ld = jsonld({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
     body_cls = "page-" + slug
@@ -607,7 +607,9 @@ def main():
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
         + "".join(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>\n" for u in sorted(urls))
         + "</urlset>\n", encoding="utf-8", newline="\n")
-    (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8", newline="\n")
+    # robots.txt: Regeln aus content/robots.txt (Suchmaschinen, KI-Suche und Linkvorschauen erlaubt, alle anderen nicht)
+    rules = (ROOT / "content/robots.txt").read_text(encoding="utf-8").rstrip()
+    (OUT / "robots.txt").write_text(f"{rules}\n\nSitemap: {DOMAIN}/sitemap.xml\n", encoding="utf-8", newline="\n")
     if SITE.get("cname"):
         (OUT / "CNAME").write_text(SITE["cname"] + "\n", encoding="utf-8", newline="\n")
     (OUT / ".nojekyll").write_text("", encoding="utf-8", newline="\n")

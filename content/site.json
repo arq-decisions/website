@@ -16,14 +16,38 @@
   ],
   "pages": {
     "home": {
-      "title": "arq decisions | Wissen, was kommt"
+      "title": "Strategische Vorausschau mit Crowd und KI | arq decisions",
+      "description": "Wir übersetzen strategische Themen in überprüfbare Prognosefragen. Ihre Fachleute und eine KI schätzen sie ein. So sehen Sie früher, was sich abzeichnet."
     },
     "privacy": {
       "title": "Datenschutzerklärung | arq decisions",
-      "description": "Datenschutzerklärung der arq decisions GmbH, Hamburg."
+      "description": "Datenschutzerklärung der arq decisions GmbH, Hamburg.",
+      "crumb": "Datenschutzerklärung"
     },
     "help": {
       "title": "Plattform-Anleitung | arq decisions"
+    },
+    "perspektiv": {
+      "title": "Perspektiv: Zukunftsszenarien in zwei Wochen | arq decisions",
+      "description": "Drei Workshops und eine KI-Analyse: Aus den Sichten Ihrer Runde entstehen Zukunftsszenarien, Prognosefragen und Ihr Zukunftsatlas. In zwei Wochen."
+    },
+    "radar": {
+      "title": "Radar: laufende Prognosen mit Crowd und KI | arq decisions",
+      "description": "Ihre eigene Instanz auf der Prognoseplattform: Menschen aus Ihrer Organisation und eine KI schätzen Ihre Zukunftsfragen fortlaufend ein."
+    },
+    "fallbeispiele": {
+      "title": "Fallbeispiele strategischer Vorausschau | arq decisions",
+      "description": "Sechs Fälle aus Kammer, Verbänden, Verwaltung, Verlag und Industrie: wie Organisationen Zukunftsfragen mit Fachleuten und KI beantworten.",
+      "crumb": "Fallbeispiele"
+    },
+    "forschung": {
+      "title": "Forschung zu Prognosen in Gruppen | arq decisions"
+    },
+    "automatisierungsradar": {
+      "description": "Ein Industrieverband lässt Crowd und KI einschätzen, welche Aufgaben im Qualitätsmanagement bis wann automatisiert werden."
+    },
+    "wettbewerb-und-kundschaft": {
+      "description": "Ein Fachverlag lässt Marktbeobachter zu seinen Zukunftsfragen berichten. Crowd und KI beziffern die Szenarien, der Verlag investiert danach."
     }
   },
   "redirects": {
@@ -51,9 +75,17 @@
       "addressCountry": "DE"
     },
     "founder": [
-      {"@type": "Person", "name": "Dr. Niklas Wallmeier"},
-      {"@type": "Person", "name": "Timo Wienefoet"}
+      {
+        "@type": "Person",
+        "name": "Dr. Niklas Wallmeier"
+      },
+      {
+        "@type": "Person",
+        "name": "Timo Wienefoet"
+      }
     ],
-    "sameAs": ["https://www.linkedin.com/company/102158017/"]
+    "sameAs": [
+      "https://www.linkedin.com/company/102158017/"
+    ]
   }
 }

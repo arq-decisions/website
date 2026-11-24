@@ -1,0 +1,41 @@
+# robots.txt für www.arqdecisions.com · bewilligt am 24.11.2026 (Vorschlag vom 22.10.2026)
+# Grundsatz: Nur Dienste, die arq auffindbar machen, dürfen die Seite lesen. Alle anderen sind ausgeschlossen.
+# Die robots.txt ist eine Bitte: Seriöse Crawler halten sich daran, Scanner und Spam-Bots nicht.
+
+# 1. Suchmaschinen
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: Google-InspectionTool
+User-agent: Bingbot
+User-agent: DuckDuckBot
+User-agent: Applebot
+User-agent: Qwantbot
+# 2. KI-Suche und KI-Assistenten, die mit Quellenangabe antworten
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+User-agent: MistralAI-Index
+# 3. KI-Modelle der großen Anbieter, damit sie arq kennen
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+# 4. Linkvorschauen beim Teilen auf LinkedIn, Xing, Slack, Teams und Co.
+User-agent: LinkedInBot
+User-agent: XING-contenttabreceiver
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+User-agent: Slackbot
+User-agent: Slackbot-LinkExpanding
+User-agent: TelegramBot
+User-agent: MicrosoftPreview
+Allow: /
+
+# Alle anderen: SEO-Werkzeuge, Datensammler, übrige KI-Crawler
+User-agent: *
+Disallow: /
